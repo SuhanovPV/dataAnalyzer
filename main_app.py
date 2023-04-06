@@ -1,6 +1,5 @@
 import tkinter as tk
-from tkinter import ttk
-from tkinter import END
+from tkinter import ttk, END, messagebox
 from tkinter import filedialog as fd
 import helper
 
@@ -10,14 +9,14 @@ class MainApp(tk.Tk):
         super().__init__()
         self.title('Data analyzer')
         self.geometry('450x300')
-        self.file_name = ''
+        self.file_name = None
 
         for c in range(5):
             self.columnconfigure(index=c, weight=1)
-        for r in range(5):
+        for r in range(15):
             self.rowconfigure(index=r, weight=1)
 
-        # UI выбора файла для
+        # UI select file
         self.lbl_open_file = tk.Label(
             text="Файл"
         )
@@ -28,9 +27,17 @@ class MainApp(tk.Tk):
             text="Выбрать файл",
             command=self.open_file
         )
-        self.lbl_open_file.grid(row=0, column=0, pady=1)
-        self.entry.grid(row=0, column=1, pady=1)
-        self.btn_open_file.grid(row=0, column=3, pady=1)
+
+        # UI remove duplicates
+        self.btn_remove_duplicates = tk.Button(
+            text="Удалить дубли",
+            command=self.remove_duplicates
+        )
+
+        self.lbl_open_file.grid(row=0, column=0)
+        self.entry.grid(row=0, column=1)
+        self.btn_open_file.grid(row=0, column=3)
+        self.btn_remove_duplicates.grid(row=1, column=3)
 
     def open_file(self):
         self.file_name = fd.askopenfilename(
@@ -38,9 +45,16 @@ class MainApp(tk.Tk):
             filetypes=(("Еxcel files", "*.xls;*xlsx"),
                        ("Все файлы", "*.*"))
         )
-        self.entry.delete(0, END)
-        print(helper.convert_path_to_win_format(self.file_name))
-        self.entry.insert(0, helper.convert_path(self.file_name, self.entry['width']))
+        if len(self.file_name) > 0:
+            self.entry.delete(0, END)
+            self.entry.insert(0, helper.convert_path(self.file_name, self.entry['width']))
+
+    def remove_duplicates(self):
+        if self.file_name is None or self.file_name == '':
+            messagebox.showinfo(title="Внимание!", message="Выберите файл!")
+            return
+        print(self.file_name)
+        pass
 
 
 if __name__ == '__main__':
