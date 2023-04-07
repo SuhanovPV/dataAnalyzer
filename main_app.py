@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk, END, messagebox
+from tkinter import ttk, END, messagebox, DISABLED, NORMAL
 from tkinter import filedialog as fd
 import helper
 
@@ -33,6 +33,7 @@ class MainApp(tk.Tk):
             text="Удалить дубли",
             command=self.remove_duplicates
         )
+        self.btn_remove_duplicates['state'] = DISABLED
 
         self.lbl_open_file.grid(row=0, column=0)
         self.entry.grid(row=0, column=1)
@@ -48,13 +49,13 @@ class MainApp(tk.Tk):
         if len(self.file_name) > 0:
             self.entry.delete(0, END)
             self.entry.insert(0, helper.convert_path(self.file_name, self.entry['width']))
+            self.btn_remove_duplicates['state'] = NORMAL
 
     def remove_duplicates(self):
         if self.file_name is None or self.file_name == '':
-            messagebox.showinfo(title="Внимание!", message="Выберите файл!")
+            messagebox.showinfo(title="Внимание!", message="Файл не выбран.")
             return
-        print(self.file_name)
-        pass
+        helper.create_file_with_unique_users(self.file_name)
 
 
 if __name__ == '__main__':
