@@ -42,6 +42,7 @@ class MainApp(tk.Tk):
 
     def open_file(self):
         self.file_name = fd.askopenfilename(
+            #TODO добавить функцию получения первичного пути
             initialdir=r"C:\Users\Pavel.Sukhanov\Desktop",
             filetypes=(("Еxcel files", "*.xls;*xlsx"),
                        ("Все файлы", "*.*"))
@@ -56,6 +57,7 @@ class MainApp(tk.Tk):
             messagebox.showinfo(title="Внимание!", message="Файл не выбран.")
             return
         helper.create_file_with_unique_users(self.file_name)
+
 
 
 if __name__ == '__main__':
