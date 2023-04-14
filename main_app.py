@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, END, messagebox, DISABLED, NORMAL
 from tkinter import filedialog as fd
-import helper
+import file_helper
 
 
 class MainApp(tk.Tk):
@@ -49,14 +49,14 @@ class MainApp(tk.Tk):
         )
         if len(self.file_name) > 0:
             self.entry.delete(0, END)
-            self.entry.insert(0, helper.convert_path(self.file_name, self.entry['width']))
+            self.entry.insert(0, file_helper.convert_path(self.file_name, self.entry['width']))
             self.btn_remove_duplicates['state'] = NORMAL
 
     def remove_duplicates(self):
         if self.file_name is None or self.file_name == '':
             messagebox.showinfo(title="Внимание!", message="Файл не выбран.")
             return
-        helper.create_file_with_unique_users(self.file_name)
+        file_helper.create_file_with_unique_users(self.file_name)
 
 
 

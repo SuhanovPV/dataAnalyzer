@@ -1,8 +1,9 @@
 import pandas as pd
-import re
 import os
 
 import pandas.core.frame
+
+from data_handler import normalize_phone, remove_duplicates
 
 
 def convert_path(path: str, size: int):
@@ -14,14 +15,6 @@ def trim_path(path: str, size: int):
     if len(path) > size:
         path = path[0:3] + '...' + path[-size + 3:]
     return path
-
-
-def normalize_phone(df: pandas.core.frame.DataFrame):
-    return df['phone'].apply(lambda x: re.sub(r'\D+', '', str(x)))
-
-
-def remove_duplicates(df: pandas.core.frame.DataFrame):
-    return df.drop_duplicates(['phone'], keep='last')
 
 
 def save_to_file(df: pandas.core.frame.DataFrame, path: str):
