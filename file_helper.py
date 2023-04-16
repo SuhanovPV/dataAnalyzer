@@ -6,6 +6,10 @@ import pandas.core.frame
 from data_handler import normalize_phone, remove_duplicates
 
 
+def get_init_path():
+    return os.path.join(os.environ['USERPROFILE'], 'Desktop')
+
+
 def convert_path(path: str, size: int):
     new_path = os.path.normpath(path)
     return trim_path(new_path, size)
@@ -39,5 +43,4 @@ def create_file_with_unique_users(path: str):
 
 
 if __name__ == '__main__':
-    # create_file_with_unique_users('C:/Users/Pavel.Sukhanov/Desktop/testUsers.xlsx')
-    get_path_to_output(('C:/Users/Pavel.Sukhanov/Desktop/testUsers.xlsx'))
+    get_init_path()

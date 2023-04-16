@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk, END, messagebox, DISABLED, NORMAL
+from tkinter import ttk, END, messagebox, DISABLED, NORMAL, SW, CENTER, BOTTOM, NW, TOP, W, N
 from tkinter import filedialog as fd
 import file_helper
 
@@ -11,17 +11,12 @@ class MainApp(tk.Tk):
         self.geometry('450x300')
         self.file_name = None
 
-        for c in range(5):
-            self.columnconfigure(index=c, weight=1)
-        for r in range(15):
-            self.rowconfigure(index=r, weight=1)
-
         # UI select file
         self.lbl_open_file = tk.Label(
-            text="Файл"
+            text="Файл:"
         )
-        self.entry = ttk.Entry(width=40, foreground="#9ca3a2")
-        self.entry.insert(0, "Выберите файл")
+        self.ent_file = ttk.Entry(foreground="#9ca3a2")
+        self.ent_file.insert(0, "Файл не выбран")
 
         self.btn_open_file = tk.Button(
             text="Выбрать файл",
@@ -30,26 +25,50 @@ class MainApp(tk.Tk):
 
         # UI remove duplicates
         self.btn_remove_duplicates = tk.Button(
-            text="Удалить дубли",
+            text="Удалить дубликаты",
             command=self.remove_duplicates
         )
         self.btn_remove_duplicates['state'] = DISABLED
 
-        self.lbl_open_file.grid(row=0, column=0)
-        self.entry.grid(row=0, column=1)
-        self.btn_open_file.grid(row=0, column=3)
+        # UI select folder with file to compare
+        self.lbl_select_folder = tk.Label(
+            text="Выберите папку"
+        )
+        self.ent_dir = ttk.Entry(foreground="#9ca3a2")
+        self.ent_dir.insert(0, "Выберите папку с файлами для сравнения")
+        self.btn_select_folder = tk.Button(
+            text="Выберите папку",
+            command=self.open_folder
+        )
+
+        # UI status bar
+        self.status_bar = tk.Label(
+            text='Пожалуйста, выберите файл, с которым хотите работать',
+            foreground="#434343"
+        )
+
+        # UI pack elements
+
+        '''
+        self.ent_file.grid(row=1, column=0)
+        self.btn_open_file.grid(row=1, column=2)
+
         self.btn_remove_duplicates.grid(row=1, column=3)
+
+        self.lbl_select_folder.grid(row=2, column=0)
+        self.ent_dir.grid(row=2, column=1)
+        self.btn_select_folder.grid(row=2, column=3)
+        '''
 
     def open_file(self):
         self.file_name = fd.askopenfilename(
-            #TODO добавить функцию получения первичного пути
-            initialdir=r"C:\Users\Pavel.Sukhanov\Desktop",
+            initialdir=file_helper.get_init_path(),
             filetypes=(("Еxcel files", "*.xls;*xlsx"),
                        ("Все файлы", "*.*"))
         )
         if len(self.file_name) > 0:
-            self.entry.delete(0, END)
-            self.entry.insert(0, file_helper.convert_path(self.file_name, self.entry['width']))
+            self.ent_file.delete(0, END)
+            self.ent_file.insert(0, file_helper.convert_path(self.file_name, self.ent_file['width']))
             self.btn_remove_duplicates['state'] = NORMAL
 
     def remove_duplicates(self):
@@ -58,6 +77,8 @@ class MainApp(tk.Tk):
             return
         file_helper.create_file_with_unique_users(self.file_name)
 
+    def open_folder(self):
+        pass
 
 
 if __name__ == '__main__':
