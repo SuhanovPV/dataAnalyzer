@@ -21,7 +21,7 @@ class MainApp(tk.Tk):
         )
         self.lbl_file_name = tk.Label(
             foreground="#9ca3a2",
-            text="Файл: не выбран",
+            text="не выбран",
             font=font_size
         )
 
@@ -51,13 +51,20 @@ class MainApp(tk.Tk):
 
         # UI select folder with file to compare
         self.lbl_select_folder = tk.Label(
-            text="Выберите папку"
+            text="Директория:",
+            font=font_size
         )
-        self.ent_dir = ttk.Entry(foreground="#9ca3a2")
-        self.ent_dir.insert(0, "Выберите папку с файлами для сравнения")
-        self.btn_select_folder = tk.Button(
-            text="Выберите папку",
-            command=self.open_folder
+        self.lbl_dir = tk.Label(
+            foreground="#9ca3a2",
+            text="не выбрана",
+            font=font_size
+        )
+
+        self.btn_select_dir = tk.Button(
+            text="Выьрать папку",
+            command=self.open_file_without_duplicates,
+            width=18,
+            font=font_size
         )
 
         # UI status bar
@@ -73,6 +80,9 @@ class MainApp(tk.Tk):
         self.btn_open_file.place(x=6, y=40)
         self.btn_remove_duplicates.place(x=186, y=40)
         self.btn_open_file_without_duplicates.place(x=366, y=40)
+        self.lbl_select_folder.place(x=6, y=76)
+        self.lbl_dir.place(x=94, y=76)
+        self.btn_select_dir.place(x=6, y=104)
 
         '''
         self.ent_file.grid(row=1, column=0)
