@@ -1,34 +1,53 @@
 import tkinter as tk
 from tkinter import ttk, END, messagebox, DISABLED, NORMAL, SW, CENTER, BOTTOM, NW, TOP, W, N
 from tkinter import filedialog as fd
+import tkinter.font as tk_font
 import file_helper
+import ui_const as const
 
 
 class MainApp(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title('Data analyzer')
-        self.geometry('450x300')
+        self.geometry(f'{const.WIDTH}x{const.HEIGHT}')
         self.file_name = None
+        font_size = tk_font.Font(size=const.FONT_SIZE)
 
         # UI select file
         self.lbl_open_file = tk.Label(
-            text="Файл:"
+            text="Файл:",
+            font=font_size
         )
-        self.ent_file = ttk.Entry(foreground="#9ca3a2")
-        self.ent_file.insert(0, "Файл не выбран")
+        self.lbl_file_name = tk.Label(
+            foreground="#9ca3a2",
+            text="Файл: не выбран",
+            font=font_size
+        )
 
         self.btn_open_file = tk.Button(
             text="Выбрать файл",
-            command=self.open_file
+            command=self.open_file,
+            width=18,
+            font=font_size
         )
 
         # UI remove duplicates
         self.btn_remove_duplicates = tk.Button(
             text="Удалить дубликаты",
-            command=self.remove_duplicates
+            command=self.remove_duplicates,
+            width=18,
+            font=font_size
         )
         self.btn_remove_duplicates['state'] = DISABLED
+
+        self.btn_open_file_without_duplicates = tk.Button(
+            text="Посмотреть результат",
+            command=self.open_file_without_duplicates,
+            width=18,
+            font=font_size
+        )
+        self.btn_open_file_without_duplicates['state'] = DISABLED
 
         # UI select folder with file to compare
         self.lbl_select_folder = tk.Label(
@@ -49,6 +68,12 @@ class MainApp(tk.Tk):
 
         # UI pack elements
 
+        self.lbl_open_file.place(x=6, y=12)
+        self.lbl_file_name.place(x=50, y=12)
+        self.btn_open_file.place(x=6, y=40)
+        self.btn_remove_duplicates.place(x=186, y=40)
+        self.btn_open_file_without_duplicates.place(x=366, y=40)
+
         '''
         self.ent_file.grid(row=1, column=0)
         self.btn_open_file.grid(row=1, column=2)
@@ -67,8 +92,7 @@ class MainApp(tk.Tk):
                        ("Все файлы", "*.*"))
         )
         if len(self.file_name) > 0:
-            self.ent_file.delete(0, END)
-            self.ent_file.insert(0, file_helper.convert_path(self.file_name, self.ent_file['width']))
+            self.lbl_file_name['text'] = file_helper.convert_path(self.file_name, 60)
             self.btn_remove_duplicates['state'] = NORMAL
 
     def remove_duplicates(self):
@@ -76,8 +100,12 @@ class MainApp(tk.Tk):
             messagebox.showinfo(title="Внимание!", message="Файл не выбран.")
             return
         file_helper.create_file_with_unique_users(self.file_name)
+        self.btn_open_file_without_duplicates['state'] = NORMAL
 
     def open_folder(self):
+        pass
+
+    def open_file_without_duplicates(self):
         pass
 
 
