@@ -28,7 +28,7 @@ def save_to_file(df: pandas.core.frame.DataFrame, path: str):
 def get_path_to_output(path: str):
     dir_name, file_name = os.path.split(path)
     name, ext = os.path.splitext(file_name)
-    new_name = name + '_no_duplicates' + ext
+    new_name = name + '_tmp' + ext
     new_path = os.path.join(dir_name, new_name)
     return new_path
 
@@ -40,6 +40,7 @@ def create_file_with_unique_users(path: str):
     users = remove_duplicates(users)
     path_to_output_file = get_path_to_output(path)
     save_to_file(users, path_to_output_file)
+    return path_to_output_file
 
 
 if __name__ == '__main__':

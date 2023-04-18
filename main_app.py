@@ -1,5 +1,6 @@
+import os
 import tkinter as tk
-from tkinter import ttk, END, messagebox, DISABLED, NORMAL, SW, CENTER, BOTTOM, NW, TOP, W, N
+from tkinter import messagebox, DISABLED, NORMAL
 from tkinter import filedialog as fd
 import tkinter.font as tk_font
 import file_helper
@@ -12,6 +13,8 @@ class MainApp(tk.Tk):
         self.title('Data analyzer')
         self.geometry(f'{const.WIDTH}x{const.HEIGHT}')
         self.file_name = None
+        self.tmp_file = None
+        self.folder = None
         font_size = tk_font.Font(size=const.FONT_SIZE)
 
         # UI select file
@@ -61,8 +64,8 @@ class MainApp(tk.Tk):
         )
 
         self.btn_select_dir = tk.Button(
-            text="Выьрать папку",
-            command=self.open_file_without_duplicates,
+            text="Выбрать папку",
+            command=self.open_folder,
             width=18,
             font=font_size
         )
@@ -109,14 +112,16 @@ class MainApp(tk.Tk):
         if self.file_name is None or self.file_name == '':
             messagebox.showinfo(title="Внимание!", message="Файл не выбран.")
             return
-        file_helper.create_file_with_unique_users(self.file_name)
+        self.tmp_file = file_helper.create_file_with_unique_users(self.file_name)
         self.btn_open_file_without_duplicates['state'] = NORMAL
 
     def open_folder(self):
-        pass
+        self.folder = fd.askdirectory(
+            initialdir=file_helper.get_init_path()
+        )
 
     def open_file_without_duplicates(self):
-        pass
+        os.startfile(self.tmp_file)
 
 
 if __name__ == '__main__':
