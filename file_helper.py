@@ -10,11 +10,15 @@ def get_init_path():
     return os.path.join(os.environ['USERPROFILE'], 'Desktop')
 
 
+def path_to_win_format(path: str):
+    return os.path.normpath(path)
+
+
 def convert_path(path: str, size: int):
-    new_path = os.path.normpath(path)
-    return trim_path(new_path, size)
+    return trim_path(path_to_win_format(path), size)
 
 
+# TODO Добавить обрезание пути по пути пользователя, если файлы находятся на диске C. Иначе обрезать по длинне, если требуется
 def trim_path(path: str, size: int):
     if len(path) > size:
         path = path[0:3] + '...' + path[-size + 3:]
@@ -43,5 +47,9 @@ def create_file_with_unique_users(path: str):
     return path_to_output_file
 
 
+def add_files_to_list(fileset: set, files: tuple):
+    return fileset.union(files)
+
+
 if __name__ == '__main__':
-    get_init_path()
+    add_files_to_list('C:/Users/Pavel.Sukhanov/Desktop/dir')
