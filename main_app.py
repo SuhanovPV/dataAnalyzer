@@ -6,7 +6,7 @@ import sys
 # import tkinter.font as tk_font
 import file_helper
 import ui_const as const
-from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QLabel, QFileDialog, QWidget
+from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QLabel, QFileDialog, QWidget, QMessageBox
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import pyqtSlot
@@ -23,32 +23,7 @@ from PyQt5.QtCore import pyqtSlot
 #         self.file_set = set()
 #         font_size = tk_font.Font(size=const.FONT_SIZE)
 #
-#         # UI select file
-#         self.lbl_open_file = tk.Label(
-#             text="Файл:",
-#             font=font_size
-#         )
-#         self.lbl_file_name = tk.Label(
-#             foreground="#9ca3a2",
-#             text="не выбран",
-#             font=font_size
-#         )
-#
-#         self.btn_open_file = tk.Button(
-#             text="Выбрать файл",
-#             command=self.open_file,
-#             width=18,
-#             font=font_size
-#         )
-#
-#         self.btn_remove_duplicates = tk.Button(
-#             text="Удалить дубликаты",
-#             command=self.remove_duplicates,
-#             width=18,
-#             font=font_size
-#         )
-#         self.btn_remove_duplicates['state'] = DISABLED
-#
+#         #
 #         self.btn_open_file_without_duplicates = tk.Button(
 #             text="Посмотреть результат",
 #             command=self.open_file_without_duplicates,
@@ -149,6 +124,16 @@ class MainWindow(QMainWindow):
             self._get_end_by_y(self.lbl_file) + const.STEP
         )
 
+        self.btn_remove_duplicates = self._set_button('Удалить дубликаты', font, self.remove_duplicates)
+        self.btn_remove_duplicates.setEnabled(False)
+        self.btn_remove_duplicates.move(
+            self._get_end_by_x(self.btn_open_file) + const.STEP,
+            self._get_end_by_y(self.lbl_file) + const.STEP
+        )
+        #TODO Нормально сделать кнопку
+        self.btn_open_file_without_duplicates = self._set_button("Посмотреть результат", font, None)
+
+
     def _set_label(self, txt, font):
         lbl = QLabel(self, text=txt)
         lbl.setFont(font)
@@ -164,21 +149,18 @@ class MainWindow(QMainWindow):
         btn.clicked.connect(command)
         return btn
 
-    #     def open_file(self):
-    #         self.file_name = fd.askopenfilename(
-    #             initialdir=file_helper.get_init_path(),
-    #             filetypes=(("Еxcel files", "*.xls;*xlsx"),
-    #                        ("Все файлы", "*.*"))
-    #         )
-    #         if len(self.file_name) > 0:
-    #             self.lbl_file_name['text'] = file_helper.convert_path(self.file_name, 60)
-    #             self.btn_remove_duplicates['state'] = NORMAL
-
     def _get_end_by_x(self, element: QWidget):
         return element.x() + element.width()
 
     def _get_end_by_y(self, element: QWidget):
         return element.y() + element.height()
+
+    def show_warning_messagebox(self, txt):
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Warning)
+        msg.setText(txt)
+        msg.setWindowTitle("Внимание!")
+        retval = msg.exec_()
 
     @pyqtSlot()
     def open_file(self):
@@ -191,6 +173,15 @@ class MainWindow(QMainWindow):
             self.file_name = file_helper.path_to_win_format(filename)
             self.lbl_file_name.setText(self.file_name)
             self.lbl_file_name.adjustSize()
+            self.btn_remove_duplicates.setEnabled(True)
+
+    @pyqtSlot()
+    def remove_duplicates(self):
+        if self.file_name is None or self.file_name == '':
+            self.show_warning_messagebox("Необходимо выбрать файл с котормы будете работать!")
+            return
+        self.tmp_file = file_helper.create_file_with_unique_users(self.file_name)
+        # TODO MAKE BTN FOR OPEN NEW FILE ACTIVE
 
 
 if __name__ == '__main__':
