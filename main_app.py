@@ -1,100 +1,12 @@
 import sys
 
-# import tkinter as tk
-# from tkinter import messagebox, DISABLED, NORMAL, S
-# from tkinter import filedialog as fd
-# import tkinter.font as tk_font
 import file_helper
 import ui_const as const
 from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QLabel, QFileDialog, QWidget, QMessageBox
-from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QVBoxLayout
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import pyqtSlot
-
-
-# class MainApp(tk.Tk):
-#     def __init__(self):
-#         super().__init__()
-#         self.title('Data analyzer')
-#         self.geometry(f'{const.WIDTH}x{const.HEIGHT}')
-#         self.file_name = None
-#         self.tmp_file = None
-#         self.folder = None
-#         self.file_set = set()
-#         font_size = tk_font.Font(size=const.FONT_SIZE)
-#
-#         #
-#         self.btn_open_file_without_duplicates = tk.Button(
-#             text="Посмотреть результат",
-#             command=self.open_file_without_duplicates,
-#             width=18,
-#             font=font_size
-#         )
-#         self.btn_open_file_without_duplicates['state'] = DISABLED
-#
-#         # UI select folder with file to compare
-#         self.lbl_select_folder = tk.Label(
-#             text="Выберите файлы для сравнения:",
-#             font=font_size
-#         )
-#
-#         self.frame = tk.Frame(self)
-#         tk.Label(self.frame, text='34234').pack()
-#
-#
-#         self.btn_select_dir = tk.Button(
-#             text="Выбрать файлы",
-#             command=self.add_files_for_compare,
-#             width=18,
-#             font=font_size
-#         )
-#
-#         # UI status bar
-#         self.status_bar = tk.Label(
-#             text='Пожалуйста, выберите файл, с которым хотите работать',
-#             foreground="#434343"
-#         )
-#
-#         # UI pack elements
-#         self.lbl_open_file.place(x=6, y=12)
-#         self.lbl_file_name.place(x=50, y=12)
-#         self.btn_open_file.place(x=6, y=40)
-#         self.btn_remove_duplicates.place(x=186, y=40)
-#         self.btn_open_file_without_duplicates.place(x=366, y=40)
-#         self.lbl_select_folder.place(x=6, y=76)
-#         self.frame.place(x=6, y=104)
-#
-#     def open_file(self):
-#         self.file_name = fd.askopenfilename(
-#             initialdir=file_helper.get_init_path(),
-#             filetypes=(("Еxcel files", "*.xls;*xlsx"),
-#                        ("Все файлы", "*.*"))
-#         )
-#         if len(self.file_name) > 0:
-#             self.lbl_file_name['text'] = file_helper.convert_path(self.file_name, 60)
-#             self.btn_remove_duplicates['state'] = NORMAL
-#
-#     def remove_duplicates(self):
-#         if self.file_name is None or self.file_name == '':
-#             messagebox.showinfo(title="Внимание!", message="Файл не выбран.")
-#             return
-#         self.tmp_file = file_helper.create_file_with_unique_users(self.file_name)
-#         self.btn_open_file_without_duplicates['state'] = NORMAL
-#
-#     def add_files_for_compare(self):
-#         files = fd.askopenfilenames(
-#             initialdir=file_helper.get_init_path(),
-#             filetypes=(("Еxcel files", "*.xls;*xlsx"),
-#                        ("Все файлы", "*.*"))
-#         )
-#         if type(files).__name__ == 'tuple':
-#             self.file_set = file_helper.add_files_to_list(self.file_set, files)
-#         print(self.file_set)
-#
-#     def open_file_without_duplicates(self):
-#         os.startfile(self.tmp_file)
-#
-#
+from PyQt5 import QtCore
 
 
 class MainWindow(QMainWindow):
@@ -103,6 +15,7 @@ class MainWindow(QMainWindow):
         self.init_ui()
         self.file_name = None
 
+    # TODO https://ru.stackoverflow.com/questions/1417424/Позиционирование-элементов-в-pyqt
     def init_ui(self):
         font = QFont()
         font.setPointSize(const.FONT_SIZE)
@@ -130,9 +43,16 @@ class MainWindow(QMainWindow):
             self._get_end_by_x(self.btn_open_file) + const.STEP,
             self._get_end_by_y(self.lbl_file) + const.STEP
         )
-        #TODO Нормально сделать кнопку
-        self.btn_open_file_without_duplicates = self._set_button("Посмотреть результат", font, None)
 
+        self.btn_open_file_without_duplicates = self._set_button("Посмотреть результат", font,
+                                                                 self.open_file_without_duplicates)
+        self.btn_open_file_without_duplicates.setEnabled(False)
+        self.btn_open_file_without_duplicates.move(
+            self._get_end_by_x(self.btn_remove_duplicates) + const.STEP,
+            self._get_end_by_y(self.lbl_file) + const.STEP
+        )
+
+        self.btn_add_files_to_compare = self._set_button("Выбрать файлы", font, self.add_files_to_compare)
 
     def _set_label(self, txt, font):
         lbl = QLabel(self, text=txt)
@@ -181,7 +101,15 @@ class MainWindow(QMainWindow):
             self.show_warning_messagebox("Необходимо выбрать файл с котормы будете работать!")
             return
         self.tmp_file = file_helper.create_file_with_unique_users(self.file_name)
-        # TODO MAKE BTN FOR OPEN NEW FILE ACTIVE
+        self.btn_open_file_without_duplicates.setEnabled(True)
+
+    @pyqtSlot()
+    def open_file_without_duplicates(self):
+        file_helper.open_file_in_excel(self.tmp_file)
+
+    @pyqtSlot()
+    def add_files_to_compare(self):
+        pass
 
 
 if __name__ == '__main__':

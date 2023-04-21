@@ -51,5 +51,9 @@ def add_files_to_list(fileset: set, files: tuple):
     return fileset.union(files)
 
 
+def open_file_in_excel(file):
+    os.startfile(file)
+
+
 if __name__ == '__main__':
     add_files_to_list('C:/Users/Pavel.Sukhanov/Desktop/dir')
