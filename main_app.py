@@ -8,6 +8,34 @@ from PyQt5.QtGui import QFont
 from PyQt5.QtCore import pyqtSlot
 from PyQt5 import QtCore
 
+# TODO разобраться с расположением элементов, см. пример:
+# class MainApp(QWidget):
+#     def __init__(self):
+#         super().__init__()
+#
+#         ok_btn = QPushButton("ОК")
+#         cancel_btn = QPushButton("Cancel")
+#
+#         hbox = QHBoxLayout()
+#         hbox.addStretch(1)
+#         hbox.addWidget(ok_btn)
+#         hbox.addWidget(cancel_btn)
+#
+#         vbox = QVBoxLayout()
+#         vbox.addStretch(1)
+#         vbox.addLayout(hbox)
+#
+#         self.setLayout(vbox)
+#
+#         self.setGeometry(300, 300, 300, 150)
+#         self.show()
+#
+#
+# if __name__ == '__main__':
+#     app = QApplication(sys.argv)
+#     main = MainApp()
+#     sys.exit(app.exec_())
+
 
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
