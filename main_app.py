@@ -64,8 +64,7 @@ class MainWindow(QMainWindow):
         self.gbox_open_file = QGroupBox('Выберите файл, с которым хотите работать')
         select_file_layout = QHBoxLayout()
         self.lbl_file_name = self._set_label('Файл не выбран')
-        # self.btn_open_file = self._set_button(txt='Выбрать файл', command=self.open_file)
-        self.btn_open_file = self._set_button(txt='Выбрать файл', command=self.test)
+        self.btn_open_file = self._set_button(txt='Выбрать файл', command=self.open_file)
         select_file_layout.addWidget(self.lbl_file_name, alignment=Qt.AlignLeft)
         select_file_layout.addWidget(self.btn_open_file, alignment=Qt.AlignRight)
         self.gbox_open_file.setLayout(select_file_layout)
@@ -151,9 +150,8 @@ class MainWindow(QMainWindow):
                                                          )
         if filename:
             self.file_name = file_helper.path_to_win_format(filename)
-
-            self.lbl_file_name.setText(self.file_name)
-            # self.lbl_file_name.adjustSize()
+            self.lbl_file_name.setText(file_helper.get_file_name(self.file_name))
+            self.lbl_file_name.setToolTip(f'<b>файл:</b><br><i>{self.file_name}</i>')
 
     def _set_lbl_width(self):
         self.lbl_file_name.setFixedWidth(self._get_allowed_lbl_width(self.lbl_file_name))
@@ -167,13 +165,15 @@ class MainWindow(QMainWindow):
         metriks = QFontMetrics(self.set_font())
         return metriks.width(text)
 
-    def test(self):
-        self.lbl_file_name.setFixedWidth(self._get_allowed_lbl_width(self.lbl_file_name))
-        txt = self.lbl_file_name.text() + 'W'
-        text_width = self._get_text_length(txt)
-        lbl_width = self._get_allowed_lbl_width(self.lbl_file_name)
-        print(text_width < lbl_width)
-        self.lbl_file_name.setText(txt)
+    def _trim_and_set_text(self, val: str, lbl: QLabel):
+        allowed_width = self._get_allowed_lbl_width(lbl)
+        required_width = self._get_text_length(val)
+        new_path = val
+        diff = required_width - allowed_width
+        if diff > 0:
+            new_path = file_helper.trim_path(val, diff % 20)
+            print(new_path)
+        lbl.setText(new_path)
 
 
 #

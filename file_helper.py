@@ -20,9 +20,12 @@ def convert_path(path: str, size: int):
 
 # TODO Добавить обрезание пути по пути пользователя, если файлы находятся на диске C. Иначе обрезать по длинне, если требуется
 def trim_path(path: str, size: int):
-    if len(path) > size:
-        path = path[0:3] + '...' + path[-size + 3:]
+    path = path[0:3] + '...' + path[6 + size:]
     return path
+
+
+def get_file_name(path: str):
+    return os.path.split(path)[1]
 
 
 def save_to_file(df: pandas.core.frame.DataFrame, path: str):
