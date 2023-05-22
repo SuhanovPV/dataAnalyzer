@@ -14,6 +14,10 @@ def path_to_win_format(path: str):
     return os.path.normpath(path)
 
 
+def is_same_files(path1: str, path2: str):
+    return os.path.samefile(path1, path2)
+
+
 def convert_path(path: str, size: int):
     return trim_path(path_to_win_format(path), size)
 
@@ -40,6 +44,7 @@ def get_path_to_output(path: str):
     return new_path
 
 
+# TODO перенести в data_handler
 def create_file_with_unique_users(path: str):
     users = pd.read_excel(path)
     # TODO: выяснить, надо ли преобразоввывать телефон
