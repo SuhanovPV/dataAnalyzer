@@ -16,6 +16,8 @@ TEXT_BTN_ADD_FILE_TO_FILELIST = "Добавить файл"
 TEXT_BTN_REMOVE_ALL_FILES = "Очистить список"
 TEXT_BTN_PROCESSING = "Проверить"
 
+TEXT_DIALOG_TITLE_OPEN_FILE_FOR_COMPARE = "Выбрать файл для сравнения"
+
 TEXT_TXT_SELECT_COMMON_FILE = "Файл не выбран"
 
 TEXT_TITLE_HANDLE_COMMON_FILE = "Работа с основным файлом"
