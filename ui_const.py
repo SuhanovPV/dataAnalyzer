@@ -4,7 +4,20 @@ WINDOW_HEIGHT = 500
 BUTTON_WIDTH = 180
 BUTTON_HEIGHT = 34
 
+EDIT_LINE_HEIGHT = 34
+
 FONT_SIZE = 11
 
-TEXT_WINDOW_TITILE = "Анализ данных"
-TEXT_SELECT_MAIN_FILE = "Выбрать"
+TEXT_WINDOW_TITLE = "Анализ данных"
+TEXT_BTN_SELECT_COMMON_FILE = "Выбрать"
+TEXT_BTN_HANDLE_COMMON_FILE = "Удалить дубликаты"
+TEXT_BTN_OPEN_FILE_WITHOUT_DUPLICATES = "Посмотреть"
+TEXT_BTN_ADD_FILE_TO_FILELIST = "Добавить файл"
+TEXT_BTN_REMOVE_ALL_FILES = "Очистить список"
+TEXT_BTN_PROCESSING = "Проверить"
+
+TEXT_TXT_SELECT_COMMON_FILE = "Файл не выбран"
+
+TEXT_TITLE_HANDLE_COMMON_FILE = "Работа с основным файлом"
+TEXT_TITLE_WORK_WITH_FILE_LIST = "Файлы для сравнения"
+
